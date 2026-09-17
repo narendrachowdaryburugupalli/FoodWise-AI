@@ -1,0 +1,28 @@
+FOODWISE AI — SDG 12 KNOWLEDGE
+
+UN SDG 12 focuses on Responsible Consumption and Production.
+
+FoodWise AI is aligned with SDG 12 because the system is designed to support more efficient food preparation and reduce avoidable food waste in campuses and institutions.
+
+Target 12.3 focuses on reducing food waste and food losses by 2030.
+
+FoodWise AI contributes to this objective through:
+- Food demand forecasting
+- Historical food-waste analysis
+- Surplus detection
+- Preparation recommendations
+- Redistribution planning
+- Sustainability impact tracking
+
+The system is a decision-support prototype. It does not claim that all food waste can be eliminated.
+
+FoodWise AI should be evaluated using measurable indicators such as:
+- Meals prepared
+- Meals consumed
+- Meals wasted
+- Waste percentage
+- Forecast accuracy
+- Potential surplus
+- Food redistributed
+
+Impact values shown by the prototype may use illustrative assumptions and should not be presented as measured real-world savings unless supported by actual data.

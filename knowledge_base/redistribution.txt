@@ -1,0 +1,31 @@
+FOODWISE AI — FOOD REDISTRIBUTION KNOWLEDGE
+
+Food redistribution is a potential response when safe, edible food is expected to remain after meal service.
+
+FoodWise AI can identify potential surplus and provide sample redistribution planning.
+
+A redistribution workflow can include:
+
+1. Detect potential surplus.
+2. Estimate the quantity available.
+3. Check whether the food is safe and suitable for redistribution.
+4. Check approved redistribution partners.
+5. Check partner capacity and availability.
+6. Allocate food according to approved procedures.
+7. Record the quantity redistributed.
+8. Record the outcome for impact measurement.
+
+Food safety must always take priority.
+
+The FoodWise AI prototype does not independently certify food as safe for redistribution.
+
+The prototype's sample partner records are demonstration data only. They do not represent confirmed NGO availability, real-time capacity or actual partnership agreements.
+
+Final redistribution decisions should be made by authorized institutional staff according to applicable food-safety procedures and local requirements.
+
+Potential redistribution indicators include:
+- Surplus meals identified
+- Meals approved for redistribution
+- Meals actually redistributed
+- Partner capacity
+- Redistribution completion rate

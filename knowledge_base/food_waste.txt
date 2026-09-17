@@ -1,0 +1,45 @@
+FOODWISE AI — FOOD WASTE REDUCTION KNOWLEDGE
+
+Food waste can occur when more food is prepared than is consumed.
+
+In a campus or institutional dining environment, food demand can vary because of:
+- Number of students
+- Events
+- Special menu days
+- Day of the week
+- Menu type
+- Attendance patterns
+- Historical consumption patterns
+
+FoodWise AI uses these types of inputs to estimate expected food consumption.
+
+Basic surplus calculation:
+
+Potential Surplus = Food Prepared - Predicted Demand
+
+If potential surplus is positive, the system identifies a possible surplus.
+
+Example:
+
+Food Prepared = 150 meals
+Predicted Demand = 130 meals
+
+Potential Surplus = 150 - 130 = 20 meals
+
+The system can classify potential surplus risk using demonstration thresholds:
+
+More than 25 meals surplus:
+HIGH risk
+
+More than 10 and up to 25 meals surplus:
+MEDIUM risk
+
+More than 0 and up to 10 meals surplus:
+LOW risk
+
+Zero or negative surplus:
+NO SURPLUS
+
+These thresholds are prototype rules and should be validated using real institutional data before operational deployment.
+
+Food preparation recommendations should not blindly follow the model. Kitchen staff should consider operational requirements, attendance uncertainty, food safety and other local constraints.

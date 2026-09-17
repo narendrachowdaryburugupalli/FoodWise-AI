@@ -1,0 +1,54 @@
+FOODWISE AI — RESPONSIBLE AI KNOWLEDGE
+
+Responsible AI is an important part of FoodWise AI.
+
+The system should provide transparent and human-supervised decision support.
+
+TRANSPARENCY
+
+Users should understand:
+- What information is used by the prediction model.
+- What the model predicts.
+- How surplus is calculated.
+- What assumptions are used.
+- What limitations exist.
+
+FAIRNESS
+
+FoodWise AI should avoid unnecessary sensitive personal information.
+
+The system should focus on aggregated operational information such as:
+- Student counts
+- Menu information
+- Events
+- Historical consumption
+- Food preparation quantities
+
+PRIVACY
+
+Individual student information should not be collected unless it is necessary, authorized and appropriately protected.
+
+Where possible, aggregated information should be used instead of personally identifiable information.
+
+HUMAN OVERSIGHT
+
+FoodWise AI should not independently make final decisions about:
+- Food safety
+- Food quality
+- Redistribution eligibility
+- Beneficiary eligibility
+- Final kitchen preparation quantities
+
+Authorized staff should review important recommendations before taking action.
+
+LIMITATIONS
+
+Model predictions can be inaccurate.
+
+Historical patterns may not represent future behavior.
+
+Changes in attendance, events, menus, holidays or unexpected circumstances can affect demand.
+
+Impact calculations based on assumptions should be clearly identified as estimates.
+
+FoodWise AI should be treated as decision-support software rather than an autonomous decision-maker.
