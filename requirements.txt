@@ -6,3 +6,6 @@ xgboost
 joblib
 plotly
 requests
+seaborn
+matplotlib
+google-genai

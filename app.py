@@ -1,6 +1,8 @@
 import os
 import re
 import requests
+from google import genai
+from google.genai import types
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -196,6 +198,7 @@ KNOWLEDGE_BASE_DIR = "knowledge_base"
 
 OLLAMA_URL = "http://localhost:11434/api/generate"
 OLLAMA_MODEL = "qwen2.5:1.5b"
+GEMINI_MODEL = "gemini-2.5-flash"
 
 
 # ============================================================
@@ -390,6 +393,52 @@ def create_rag_context(results):
 # LOCAL LLM
 # ============================================================
 
+def get_gemini_api_key():
+    """Read the Gemini key from Streamlit secrets or an environment variable."""
+    try:
+        key = st.secrets.get("GEMINI_API_KEY", "")
+    except Exception:
+        key = ""
+
+    return (key or os.getenv("GEMINI_API_KEY", "")).strip()
+
+
+def generate_with_gemini(prompt, api_key):
+    """Generate a response using Gemini for cloud deployment."""
+    client = genai.Client(api_key=api_key)
+    response = client.models.generate_content(
+        model=GEMINI_MODEL,
+        contents=prompt,
+        config=types.GenerateContentConfig(
+            temperature=0.2,
+            max_output_tokens=700,
+        ),
+    )
+    answer = (getattr(response, "text", "") or "").strip()
+    if answer:
+        return answer
+    return "The cloud AI model returned an empty response."
+
+
+def generate_with_ollama(prompt):
+    """Generate a response using the local Ollama model."""
+    response = requests.post(
+        OLLAMA_URL,
+        json={
+            "model": OLLAMA_MODEL,
+            "prompt": prompt,
+            "stream": False,
+        },
+        timeout=120,
+    )
+    response.raise_for_status()
+    data = response.json()
+    answer = data.get("response", "").strip()
+    if answer:
+        return answer
+    return "The local AI model returned an empty response."
+
+
 def generate_ai_answer(
     question,
     context,
@@ -417,6 +466,7 @@ IMPORTANT NUMERICAL RULES:
 - Do not claim that food is safe for redistribution.
 - Food safety and redistribution decisions must be made by authorized human staff.
 - Clearly distinguish ML predictions from measured or actual waste.
+- Use the retrieved knowledge as supporting context, not as a source for changing the current dashboard numbers.
 
 CURRENT FOODWISE DATA:
 Students: {students}
@@ -432,43 +482,45 @@ USER QUESTION:
 {question}
 """
 
+    gemini_key = get_gemini_api_key()
+
+    # Cloud deployment path: Streamlit secrets -> Gemini.
+    if gemini_key:
+        try:
+            return generate_with_gemini(prompt, gemini_key), True
+        except Exception as exc:
+            return (
+                "The cloud AI service could not generate a response right now. "
+                "The RAG retrieval above is still working. "
+                f"Technical detail: {type(exc).__name__}",
+                False,
+            )
+
+    # Local development path: Ollama on localhost.
     try:
-        response = requests.post(
-            OLLAMA_URL,
-            json={
-                "model": OLLAMA_MODEL,
-                "prompt": prompt,
-                "stream": False,
-            },
-            timeout=120,
-        )
-
-        response.raise_for_status()
-        data = response.json()
-        answer = data.get("response", "").strip()
-
-        if answer:
-            return answer, True
-
-        return "The local AI model returned an empty response.", False
-
+        return generate_with_ollama(prompt), True
     except requests.exceptions.ConnectionError:
         return (
-            "Ollama is not running. Start Ollama and try again. "
-            "The RAG retrieval above is still working.",
+            "No cloud AI key is configured and Ollama is not running locally. "
+            "The RAG retrieval above is still working. For the deployed app, "
+            "add GEMINI_API_KEY to Streamlit Secrets.",
             False,
         )
-
     except requests.exceptions.Timeout:
         return (
-            "The local AI model took too long to respond. "
-            "Try a shorter question.",
+            "The local AI model took too long to respond. Try a shorter question.",
             False,
         )
-
+    except requests.exceptions.RequestException as exc:
+        return (
+            "The local AI model could not be reached. The RAG retrieval above "
+            f"is still working. Technical detail: {type(exc).__name__}",
+            False,
+        )
     except Exception as exc:
         return (
-            f"The local AI model could not generate a response: {exc}",
+            f"The AI generation layer encountered an error: {type(exc).__name__}. "
+            "The RAG retrieval above is still working.",
             False,
         )
 
@@ -1649,7 +1701,7 @@ with tab2:
         "and entered food-prepared value."
     )
 
-# TAB 3 — AI ASSISTANT + RAG + LOCAL LLM
+# TAB 3 — AI ASSISTANT + RAG + CLOUD/LOCAL LLM
 # ============================================================
 
 with tab3:
@@ -1666,7 +1718,7 @@ with tab3:
             </div>
             <div style="margin-top:.55rem;">
                 <span class="mini-badge">🧠 RAG</span>
-                <span class="mini-badge">💬 Local LLM</span>
+                <span class="mini-badge">💬 Local + Cloud LLM</span>
                 <span class="mini-badge">📚 Knowledge Base</span>
                 <span class="mini-badge">🛡️ Human Oversight</span>
             </div>
@@ -2722,8 +2774,8 @@ with tab7:
     with ai3:
         render_decision_card(
             "Generation layer",
-            "Local LLM",
-            f"Generates explanations using the configured local model: {OLLAMA_MODEL}.",
+            "Gemini / Ollama",
+            f"Uses Gemini in the deployed app when GEMINI_API_KEY is configured; otherwise uses local Ollama: {OLLAMA_MODEL}.",
             "neutral",
         )
 
